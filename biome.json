@@ -36,9 +36,6 @@
       "style": {
         "noNonNullAssertion": "error",
         "useTemplate": "error"
-      },
-      "a11y": {
-        "useSemanticElements": "warn"
       }
     }
   }
