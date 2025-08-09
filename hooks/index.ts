@@ -1,17 +1,16 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from 'react';
 
 // Hook para gerenciar estado local com localStorage
 export function useLocalStorage<T>(key: string, initialValue: T) {
   // State para armazenar o valor
   const [storedValue, setStoredValue] = useState<T>(() => {
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       return initialValue;
     }
     try {
       const item = window.localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      console.error(`Erro ao ler localStorage key "${key}":`, error);
+    } catch (_error) {
       return initialValue;
     }
   });
@@ -21,12 +20,10 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     try {
       const valueToStore = value instanceof Function ? value(storedValue) : value;
       setStoredValue(valueToStore);
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
       }
-    } catch (error) {
-      console.error(`Erro ao definir localStorage key "${key}":`, error);
-    }
+    } catch (_error) {}
   };
 
   return [storedValue, setValue] as const;
@@ -42,8 +39,8 @@ export function useMediaQuery(query: string) {
       setMatches(media.matches);
     }
     const listener = () => setMatches(media.matches);
-    window.addEventListener("resize", listener);
-    return () => window.removeEventListener("resize", listener);
+    window.addEventListener('resize', listener);
+    return () => window.removeEventListener('resize', listener);
   }, [matches, query]);
 
   return matches;

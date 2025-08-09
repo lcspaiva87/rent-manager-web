@@ -6,8 +6,16 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "biome check",
+    "lint": "biome check .",
+    "lint:fix": "biome check . --fix",
     "format": "biome format . --write",
+    "format:check": "biome format .",
+    "check": "biome check . && biome format . --check",
+    "check:fix": "biome check . --fix && biome format . --write",
+    "type-check": "tsc --noEmit",
+    "pre-commit": "lint-staged",
+    "check-all": "npm run lint && npm run format:check && npm run type-check",
+    "fix-all": "npm run lint:fix && npm run format",
     "prepare": "husky"
   },
   "dependencies": {
@@ -51,11 +59,13 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "biome check",
-      "biome format --write"
+      "biome check --fix",
+      "biome format --write",
+      "git add"
     ],
-    "*.{json,md}": [
-      "biome format --write"
+    "*.{json,md,css}": [
+      "biome format --write",
+      "git add"
     ]
   }
 }

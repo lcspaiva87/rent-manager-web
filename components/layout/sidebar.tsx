@@ -35,7 +35,7 @@ export function Sidebar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const isActive = (path: string) => pathname === path;
+  const _isActive = (path: string) => pathname === path;
 
   function handleNavigation() {
     setIsMobileMenuOpen(false);
@@ -138,6 +138,8 @@ export function Sidebar() {
 
       {isMobileMenuOpen && (
         <div
+          role="button"
+          tabIndex={0}
           className="fixed inset-0 bg-black bg-opacity-50 z-[65] lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
           onKeyDown={(e) => {

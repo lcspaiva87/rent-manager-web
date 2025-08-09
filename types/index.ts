@@ -9,7 +9,7 @@ export interface User {
   updatedAt: Date;
 }
 
-export type UserRole = "admin" | "manager" | "tenant" | "owner";
+export type UserRole = 'admin' | 'manager' | 'tenant' | 'owner';
 
 // Tipos de propriedade
 export interface Property {
@@ -31,7 +31,7 @@ export interface Property {
   updatedAt: Date;
 }
 
-export type PropertyType = "apartment" | "house" | "studio" | "commercial";
+export type PropertyType = 'apartment' | 'house' | 'studio' | 'commercial';
 
 // Tipos de endereço
 export interface Address {
@@ -61,7 +61,7 @@ export interface Contract {
   updatedAt: Date;
 }
 
-export type ContractStatus = "active" | "pending" | "expired" | "terminated";
+export type ContractStatus = 'active' | 'pending' | 'expired' | 'terminated';
 
 // Tipos de pagamento
 export interface Payment {
@@ -77,11 +77,11 @@ export interface Payment {
   updatedAt: Date;
 }
 
-export type PaymentStatus = "pending" | "paid" | "overdue" | "cancelled";
-export type PaymentType = "rent" | "deposit" | "fee" | "utility";
+export type PaymentStatus = 'pending' | 'paid' | 'overdue' | 'cancelled';
+export type PaymentType = 'rent' | 'deposit' | 'fee' | 'utility';
 
 // Tipos de API
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   message?: string;

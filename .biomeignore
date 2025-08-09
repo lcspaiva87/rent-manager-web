@@ -2,12 +2,34 @@
 .next/
 dist/
 build/
+out/
 
 # Dependencies
 node_modules/
 
 # Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.vscode/
+.idea/
+
+# Cache
+.turbo/
+.vercel/
+
+# Generated files
+next-env.d.ts
 
 # Environment files
 .env*
