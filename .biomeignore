@@ -31,6 +31,11 @@ yarn-error.log*
 # Generated files
 next-env.d.ts
 
+# Cypress
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
 # Environment files
 .env*
 
