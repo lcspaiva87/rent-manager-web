@@ -2,7 +2,7 @@ import { BarChart3, Building2, CheckCircle, Users } from 'lucide-react';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import Image from 'next/image';
-import loginHero from '@/public/form/login-hero.jpg';
+import loginHero from '@/assets/images/login-hero.jpg';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
