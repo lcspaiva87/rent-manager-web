@@ -26,8 +26,8 @@ export default function AuthLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen`}>
-        <div className="flex h-full">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
+        <div className="flex h-screen">
           <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
             {/* Imagem de fundo */}
             <div className="absolute inset-0">

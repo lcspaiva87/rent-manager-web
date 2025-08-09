@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 const navigationItems = [
@@ -31,7 +32,11 @@ const navigationItems = [
 ];
 
 export function Sidebar() {
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const isActive = (path: string) => pathname === path;
+
   function handleNavigation() {
     setIsMobileMenuOpen(false);
   }
@@ -130,9 +135,9 @@ export function Sidebar() {
           </div>
         </div>
       </nav>
+
       {isMobileMenuOpen && (
         <div
-          tabIndex={0}
           className="fixed inset-0 bg-black bg-opacity-50 z-[65] lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
           onKeyDown={(e) => {
