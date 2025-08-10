@@ -2,10 +2,13 @@
 
 import {
   BarChart3,
+  Bell,
+  Building2,
   CreditCard,
   DollarSign,
   FileText,
   HelpCircle,
+  Home,
   type LucideIcon,
   Menu,
   Settings,
@@ -13,6 +16,7 @@ import {
   Tag,
   Target,
   TrendingUp,
+  Users,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -20,15 +24,14 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 const navigationItems = [
-  { title: 'Dashboard', url: '/dashboard', icon: BarChart3 },
-  { title: 'Receitas', url: '/receitas', icon: TrendingUp },
-  { title: 'Despesas', url: '/expenses', icon: CreditCard },
-  { title: 'Transações', url: '/transacoes', icon: DollarSign },
-  { title: 'Categorias', url: '/categories', icon: Tag },
-  { title: 'Mercado', url: '/market', icon: ShoppingCart },
-  { title: 'Relatórios', url: '/relatorios', icon: FileText },
-  { title: 'Metas', url: '/metas', icon: Target },
-  { title: 'Perfil', url: '/perfil', icon: Settings },
+  { id: 'dashboard', label: 'Dashboard', icon: Home },
+  { id: 'properties', label: 'Imóveis', icon: Building2 },
+  { id: 'tenants', label: 'Inquilinos', icon: Users },
+  { id: 'payments', label: 'Pagamentos', icon: CreditCard },
+  { id: 'contracts', label: 'Contratos', icon: FileText },
+  { id: 'reports', label: 'Relatórios', icon: BarChart3 },
+  { id: 'notifications', label: 'Notificações', icon: Bell },
+  { id: 'settings', label: 'Configurações', icon: Settings },
 ];
 
 export function Sidebar() {
@@ -114,8 +117,8 @@ export function Sidebar() {
                 </div>
                 <div className="space-y-1">
                   {navigationItems.map((item) => (
-                    <NavItem key={item.title} href={item.url} icon={item.icon}>
-                      {item.title}
+                    <NavItem key={item.id} href={item.id} icon={item.icon}>
+                      {item.label}
                     </NavItem>
                   ))}
                 </div>
