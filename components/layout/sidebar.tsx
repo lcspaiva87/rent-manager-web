@@ -137,16 +137,11 @@ export function Sidebar() {
       </nav>
 
       {isMobileMenuOpen && (
-        <div
-          role="button"
-          tabIndex={0}
-          className="fixed inset-0 bg-black bg-opacity-50 z-[65] lg:hidden"
+        <button
+          type="button"
+          className="fixed inset-0 bg-black bg-opacity-50 z-[65] lg:hidden border-0 p-0 cursor-default"
           onClick={() => setIsMobileMenuOpen(false)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              setIsMobileMenuOpen(false);
-            }
-          }}
+          aria-label="Fechar menu"
         />
       )}
     </>

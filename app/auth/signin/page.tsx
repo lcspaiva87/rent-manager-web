@@ -1,5 +1,20 @@
-import { RegisterForm } from './_components/register-form';
+import { LoginForm } from './_components/login-form';
 
-export default function signinPage() {
-  return <RegisterForm />;
+export const metadata = {
+  title: 'Signin',
+  description: 'Signin',
+  icons: {
+    icon: '/favicon.ico',
+  },
+  robots: {
+    index: false,
+    follow: false,
+  },
+  openGraph: {
+    title: 'Signup',
+  },
+};
+
+export default function Signin() {
+  return <LoginForm />;
 }

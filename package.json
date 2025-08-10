@@ -67,12 +67,10 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "biome check --fix",
-      "biome format --write",
-      "git add"
+      "biome format --write"
     ],
     "*.{json,md,css}": [
-      "biome format --write",
-      "git add"
+      "biome format --write"
     ]
   }
 }

@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+import type { UserData } from './types';
 
 // ***********************************************
 // This example commands.ts shows you how to
@@ -18,19 +19,49 @@ declare global {
        * @example cy.login('user@example.com', 'password123')
        */
       login(email: string, password: string): Chainable<void>;
-      
+
       /**
        * Custom command to fill login form
        * @example cy.fillLoginForm('user@example.com', 'password123')
        */
       fillLoginForm(email: string, password: string): Chainable<void>;
-      
+
+      /**
+       * Custom command to fill register form
+       * @example cy.fillRegisterForm(userData)
+       */
+      fillRegisterForm(userData: UserData): Chainable<void>;
+
+      /**
+       * Custom command to submit register form
+       * @example cy.submitRegisterForm()
+       */
+      submitRegisterForm(): Chainable<void>;
+
+      /**
+       * Custom command to check error message
+       * @example cy.checkErrorMessage('Email é obrigatório')
+       */
+      checkErrorMessage(message: string): Chainable<void>;
+
+      /**
+       * Custom command to check no errors
+       * @example cy.checkNoErrors()
+       */
+      checkNoErrors(): Chainable<void>;
+
+      /**
+       * Custom command to register user
+       * @example cy.registerUser(userData)
+       */
+      registerUser(userData: UserData): Chainable<void>;
+
       /**
        * Custom command to wait for page load
        * @example cy.waitForPageLoad()
        */
       waitForPageLoad(): Chainable<void>;
-      
+
       /**
        * Custom command to check accessibility
        * @example cy.checkA11y()
@@ -54,6 +85,38 @@ Cypress.Commands.add('fillLoginForm', (email: string, password: string) => {
   cy.get('input[type="password"]').type(password);
 });
 
+// Fill register form command
+Cypress.Commands.add('fillRegisterForm', (userData: UserData) => {
+  cy.get('#name').clear().type(userData.name);
+  cy.get('#email').clear().type(userData.email);
+  cy.get('#password').clear().type(userData.password);
+  if (userData.confirmPassword) {
+    cy.get('#confirmPassword').clear().type(userData.confirmPassword);
+  }
+});
+
+// Submit register form command
+Cypress.Commands.add('submitRegisterForm', () => {
+  cy.get('button[type="submit"]').click();
+});
+
+// Check error message command
+Cypress.Commands.add('checkErrorMessage', (message: string) => {
+  cy.contains('.text-destructive', message).should('be.visible');
+});
+
+// Check no errors command
+Cypress.Commands.add('checkNoErrors', () => {
+  cy.get('.text-destructive').should('not.exist');
+});
+
+// Register user command
+Cypress.Commands.add('registerUser', (userData: UserData) => {
+  cy.visit('/auth/signin');
+  cy.fillRegisterForm(userData);
+  cy.submitRegisterForm();
+});
+
 // Wait for page load command
 Cypress.Commands.add('waitForPageLoad', () => {
   cy.get('body').should('be.visible');
@@ -65,7 +128,7 @@ Cypress.Commands.add('checkA11y', () => {
   // Check for basic accessibility requirements
   cy.get('main').should('exist');
   cy.get('h1, h2, h3, h4, h5, h6').should('exist');
-  
+
   // Check for form labels
   cy.get('input').each(($input) => {
     const id = $input.attr('id');
@@ -74,5 +137,3 @@ Cypress.Commands.add('checkA11y', () => {
     }
   });
 });
-
-export {};

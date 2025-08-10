@@ -20,9 +20,6 @@ Cypress.config('viewportWidth', 1280);
 Cypress.config('viewportHeight', 720);
 
 // Global error handling
-Cypress.on('uncaught:exception', (err, runnable) => {
-  // Returning false here prevents Cypress from failing the test
-  // Customize this based on your needs
-  console.log('Uncaught exception:', err.message);
+Cypress.on('uncaught:exception', (_err, _runnable) => {
   return false;
 });

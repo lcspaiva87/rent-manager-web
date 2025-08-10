@@ -1,0 +1,191 @@
+{
+  "validUser": {
+    "name": "João Silva Santos",
+    "email": "joao.silva@example.com",
+    "password": "MinhaSenh@123",
+    "confirmPassword": "MinhaSenh@123"
+  },
+  "validUser2": {
+    "name": "Maria Oliveira Costa",
+    "email": "maria.oliveira@teste.com.br",
+    "password": "SenhaForte@456",
+    "confirmPassword": "SenhaForte@456"
+  },
+  "invalidUsers": {
+    "emptyName": {
+      "name": "",
+      "email": "test@example.com",
+      "password": "MinhaSenh@123",
+      "confirmPassword": "MinhaSenh@123"
+    },
+    "shortName": {
+      "name": "A",
+      "email": "test@example.com",
+      "password": "MinhaSenh@123",
+      "confirmPassword": "MinhaSenh@123"
+    },
+    "longName": {
+      "name": "Este é um nome extremamente longo que excede o limite permitido de cinquenta caracteres",
+      "email": "test@example.com",
+      "password": "MinhaSenh@123",
+      "confirmPassword": "MinhaSenh@123"
+    },
+    "invalidEmail": {
+      "name": "João Silva",
+      "email": "email-invalido",
+      "password": "MinhaSenh@123",
+      "confirmPassword": "MinhaSenh@123"
+    },
+    "emptyEmail": {
+      "name": "João Silva",
+      "email": "",
+      "password": "MinhaSenh@123",
+      "confirmPassword": "MinhaSenh@123"
+    },
+    "weakPassword": {
+      "name": "João Silva",
+      "email": "joao@example.com",
+      "password": "senhafraca",
+      "confirmPassword": "senhafraca"
+    },
+    "shortPassword": {
+      "name": "João Silva",
+      "email": "joao@example.com",
+      "password": "123",
+      "confirmPassword": "123"
+    },
+    "longPassword": {
+      "name": "João Silva",
+      "email": "joao@example.com",
+      "password": "A1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "confirmPassword": "A1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "mismatchedPasswords": {
+      "name": "João Silva",
+      "email": "joao@example.com",
+      "password": "MinhaSenh@123",
+      "confirmPassword": "SenhaDiferente@456"
+    },
+    "emptyConfirmPassword": {
+      "name": "João Silva",
+      "email": "joao@example.com",
+      "password": "MinhaSenh@123",
+      "confirmPassword": ""
+    }
+  },
+  "specialCaseUsers": {
+    "withSpecialCharacters": {
+      "name": "José da Silva-Ñoño Jr.",
+      "email": "jose.silva+test@domain.co.uk",
+      "password": "MinhaSênha@123",
+      "confirmPassword": "MinhaSênha@123"
+    },
+    "withAccents": {
+      "name": "João António Ção",
+      "email": "joao.antonio@domínio.com",
+      "password": "SenhaÇão@123",
+      "confirmPassword": "SenhaÇão@123"
+    },
+    "longEmail": {
+      "name": "Usuário Teste",
+      "email": "usuario.com.nome.muito.longo.para.testar@dominio.exemplo.muito.longo.com.br",
+      "password": "MinhaSenh@123",
+      "confirmPassword": "MinhaSenh@123"
+    }
+  },
+  "loadingStates": {
+    "normalSubmission": {
+      "delay": 1000,
+      "response": {
+        "statusCode": 200,
+        "body": {
+          "success": true,
+          "message": "Usuário registrado com sucesso",
+          "user": {
+            "id": "123",
+            "email": "joao@example.com",
+            "name": "João Silva"
+          }
+        }
+      }
+    },
+    "slowSubmission": {
+      "delay": 3000,
+      "response": {
+        "statusCode": 200,
+        "body": {
+          "success": true,
+          "message": "Usuário registrado com sucesso"
+        }
+      }
+    },
+    "errorSubmission": {
+      "delay": 500,
+      "response": {
+        "statusCode": 400,
+        "body": {
+          "success": false,
+          "message": "Email já está em uso",
+          "errors": {
+            "email": "Este email já está cadastrado"
+          }
+        }
+      }
+    },
+    "serverError": {
+      "delay": 1000,
+      "response": {
+        "statusCode": 500,
+        "body": {
+          "success": false,
+          "message": "Erro interno do servidor"
+        }
+      }
+    }
+  },
+  "validationMessages": {
+    "name": {
+      "required": "Nome deve ter pelo menos 2 caracteres",
+      "minLength": "Nome deve ter pelo menos 2 caracteres",
+      "maxLength": "Nome deve ter no máximo 50 caracteres"
+    },
+    "email": {
+      "required": "Email é obrigatório",
+      "invalid": "Email deve ter um formato válido"
+    },
+    "password": {
+      "required": "Senha deve ter pelo menos 6 caracteres",
+      "minLength": "Senha deve ter pelo menos 6 caracteres",
+      "maxLength": "Senha deve ter no máximo 50 caracteres",
+      "complexity": "Senha deve conter pelo menos uma letra maiúscula, uma minúscula e um número"
+    },
+    "confirmPassword": {
+      "required": "Confirmação de senha é obrigatória",
+      "mismatch": "Senhas não coincidem"
+    }
+  },
+  "apiEndpoints": {
+    "register": "/api/auth/register",
+    "login": "/api/auth/login",
+    "checkEmail": "/api/auth/check-email"
+  },
+  "testScenarios": {
+    "happyPath": {
+      "description": "Usuário preenche todos os campos corretamente e registra com sucesso",
+      "userData": "validUser",
+      "expectedResult": "success"
+    },
+    "duplicateEmail": {
+      "description": "Usuário tenta se registrar com email já existente",
+      "userData": "validUser",
+      "mockResponse": "errorSubmission",
+      "expectedResult": "emailAlreadyExists"
+    },
+    "networkError": {
+      "description": "Falha de rede durante o registro",
+      "userData": "validUser",
+      "mockResponse": "serverError",
+      "expectedResult": "networkError"
+    }
+  }
+}
