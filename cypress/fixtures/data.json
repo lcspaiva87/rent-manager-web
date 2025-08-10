@@ -1,0 +1,74 @@
+{
+  "users": {
+    "validUser": {
+      "email": "admin@rentmanager.com",
+      "password": "Admin123!",
+      "name": "Admin User"
+    },
+    "testUser": {
+      "email": "test@example.com",
+      "password": "Test123!",
+      "name": "Test User"
+    },
+    "invalidUser": {
+      "email": "invalid@example.com",
+      "password": "wrongpassword"
+    }
+  },
+  "properties": {
+    "apartment": {
+      "title": "Apartamento Moderno",
+      "description": "Apartamento de 2 quartos no centro da cidade",
+      "type": "apartment",
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "area": 80,
+      "rent": 1500,
+      "deposit": 3000,
+      "address": {
+        "street": "Rua das Flores",
+        "number": "123",
+        "neighborhood": "Centro",
+        "city": "São Paulo",
+        "state": "SP",
+        "zipCode": "01234-567"
+      }
+    },
+    "house": {
+      "title": "Casa Familiar",
+      "description": "Casa de 3 quartos com quintal",
+      "type": "house",
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "area": 150,
+      "rent": 2500,
+      "deposit": 5000,
+      "address": {
+        "street": "Avenida Principal",
+        "number": "456",
+        "neighborhood": "Jardim",
+        "city": "São Paulo",
+        "state": "SP",
+        "zipCode": "01234-890"
+      }
+    }
+  },
+  "api": {
+    "endpoints": {
+      "login": "/api/auth/login",
+      "properties": "/api/properties",
+      "users": "/api/users",
+      "contracts": "/api/contracts"
+    },
+    "responses": {
+      "success": {
+        "success": true,
+        "message": "Operation completed successfully"
+      },
+      "error": {
+        "success": false,
+        "error": "An error occurred"
+      }
+    }
+  }
+}
