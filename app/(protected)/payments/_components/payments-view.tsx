@@ -115,7 +115,10 @@ export function PaymentsView({ payments }: PaymentsViewProps) {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="font-semibold">{payment.tenantName}</h3>
-                        <Badge variant={variant as any} className="flex items-center gap-1">
+                        <Badge
+                          variant={variant as 'default' | 'secondary' | 'destructive' | 'outline'}
+                          className="flex items-center gap-1"
+                        >
                           <Icon size={12} /> {label}
                         </Badge>
                       </div>
