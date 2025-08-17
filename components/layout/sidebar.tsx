@@ -5,17 +5,12 @@ import {
   Bell,
   Building2,
   CreditCard,
-  DollarSign,
   FileText,
   HelpCircle,
   Home,
   type LucideIcon,
   Menu,
   Settings,
-  ShoppingCart,
-  Tag,
-  Target,
-  TrendingUp,
   Users,
 } from 'lucide-react';
 import Image from 'next/image';
