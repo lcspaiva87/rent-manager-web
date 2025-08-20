@@ -1,13 +1,6 @@
-'use client';
-
-import { AlertCircle, CheckCircle, Circle, Grid2x2, List, Plus, Upload } from 'lucide-react';
-import { useState } from 'react';
 import lagoaDosIngleses from '@/assets/images/login-hero.jpg';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import type { PropertyCard as PropertyCardType } from '@/types';
-import { PropertyCard } from './_components';
-import { ModalPreview } from './_components/modal-preview';
+import { RealEstateView } from './_components/real-estate-view';
 
 // Dados mockados para demonstração
 const mockProperties: PropertyCardType[] = [
@@ -84,84 +77,8 @@ const mockProperties: PropertyCardType[] = [
   },
 ];
 
-export default function RealEstate() {
-  const [selectedProperty, setSelectedProperty] = useState<PropertyCardType | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handlePropertyClick = (property: PropertyCardType) => {
-    setSelectedProperty(property);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedProperty(null);
-  };
-
-  return (
-    <main className="flex flex-col gap-10">
-      <section className="flex items-center gap-2 justify-between w-full">
-        <Input className="p-3 w-1/2" placeholder="Procurar por morada, cidade..." />
-        <div className="flex items-center gap-2 ">
-          <Button variant="ghost">
-            <Plus className="size-4" />
-            Adicionar
-          </Button>
-
-          <Button>
-            <Upload className="size-4" />
-            Importar
-          </Button>
-        </div>
-      </section>
-
-      <section className="flex gap-6 justify-between w-full flex-col">
-        <div className="flex items-center gap-2 justify-between w-full">
-          <h1 className="text-2xl font-bold">Imóveis</h1>
-          <p className="text-sm text-balck-opacity-80">Lista completa dos seus imóveis</p>
-        </div>
-
-        <div className="flex items-center gap-2 rounded-2xl p-4 w-full border border-gray-200 justify-between">
-          <div className="flex items-center gap-2">
-            <Button variant="ghost-gray">
-              <CheckCircle className="size-4 text-green-500" />
-              Alugados
-            </Button>
-            <Button variant="ghost-gray">
-              <Circle className="size-4 text-gray-500" />
-              Vazio
-            </Button>
-            <Button variant="ghost-gray">
-              <AlertCircle className="size-4 text-red-500" />
-              Atrazados
-            </Button>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost-gray">
-              <Grid2x2 className="size-4" />
-              Colunas
-            </Button>
-            <Button variant="ghost-gray">
-              <List className="size-4" />
-              Tabela
-            </Button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-          {mockProperties.map((property) => (
-            <PropertyCard
-              key={property.id}
-              property={property}
-              onClick={() => handlePropertyClick(property)}
-            />
-          ))}
-        </div>
-      </section>
-
-      {selectedProperty && (
-        <ModalPreview property={selectedProperty} isOpen={isModalOpen} onClose={handleCloseModal} />
-      )}
-    </main>
-  );
+export default async function RealEstate() {
+  // Futuramente podemos buscar dados do banco/serviço aqui
+  const properties: PropertyCardType[] = mockProperties;
+  return <RealEstateView initialProperties={properties} />;
 }

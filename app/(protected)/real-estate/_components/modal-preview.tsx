@@ -40,7 +40,10 @@ interface ModalPreviewProps {
 export function ModalPreview({ property, isOpen, onClose }: ModalPreviewProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
-      <AlertDialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <AlertDialogContent
+        className="max-w-4xl max-h-[90vh] overflow-y-auto"
+        data-testid="property-modal"
+      >
         <AlertDialogHeader>
           <AlertDialogTitle className="text-xl font-bold flex items-center justify-between">
             <span>{property.title}</span>
