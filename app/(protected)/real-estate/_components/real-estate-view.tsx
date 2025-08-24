@@ -1,12 +1,14 @@
 'use client';
 
-import { AlertCircle, CheckCircle, Circle, Grid2x2, List, Plus, Upload } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { AlertCircle, CheckCircle, Circle, Grid2x2, List } from 'lucide-react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import type { PropertyCard as PropertyCardType } from '@/types';
+import { CreateRealState } from './create-real-state';
 import { ModalPreview } from './modal-preview';
 import { PropertyCard } from './property-card';
+import { SearchRealState } from './search-real-state';
+import { UploadRealEstate } from './upload-real-estate';
 
 interface RealEstateViewProps {
   initialProperties: PropertyCardType[];
@@ -17,6 +19,7 @@ export function RealEstateView({ initialProperties }: RealEstateViewProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'rented' | 'vacant' | 'overdue'>('all');
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const filteredProperties = useMemo(
     () =>
@@ -29,7 +32,7 @@ export function RealEstateView({ initialProperties }: RealEstateViewProps) {
           (p.address ? p.address.toLowerCase().includes(q) : false);
         return matchesStatus && matchesQuery;
       }),
-    [searchQuery, statusFilter, initialProperties]
+    [statusFilter, initialProperties, searchQuery]
   );
 
   const handlePropertyClick = (property: PropertyCardType) => {
@@ -42,27 +45,22 @@ export function RealEstateView({ initialProperties }: RealEstateViewProps) {
     setSelectedProperty(null);
   };
 
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      setSearchQuery(e.currentTarget.value);
+    }
+  }, []);
   return (
     <main className="flex flex-col gap-10">
-      <section className="flex items-center gap-2 justify-between w-full">
-        <Input
-          aria-label="Pesquisar por morada, cidade..."
-          className="p-3 w-1/2"
-          placeholder="Procurar por morada, cidade..."
-          data-testid="real-estate-search"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+      <section
+        data-testid="real-estate-search-input"
+        className="flex items-center gap-2 justify-between w-full"
+      >
+        <SearchRealState onKeyDown={handleKeyDown} disabled={false} ref={inputRef} />
         <div className="flex items-center gap-2 ">
-          <Button variant="ghost" aria-label="Adicionar imóvel">
-            <Plus className="size-4" />
-            Adicionar
-          </Button>
-
-          <Button aria-label="Importar imóveis">
-            <Upload className="size-4" />
-            Importar
-          </Button>
+          <CreateRealState />
+          <UploadRealEstate />
         </div>
       </section>
 
