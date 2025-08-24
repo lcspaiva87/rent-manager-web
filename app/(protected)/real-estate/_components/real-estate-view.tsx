@@ -46,6 +46,7 @@ export function RealEstateView({ initialProperties }: RealEstateViewProps) {
     <main className="flex flex-col gap-10">
       <section className="flex items-center gap-2 justify-between w-full">
         <Input
+          aria-label="Pesquisar por morada, cidade..."
           className="p-3 w-1/2"
           placeholder="Procurar por morada, cidade..."
           data-testid="real-estate-search"
@@ -53,12 +54,12 @@ export function RealEstateView({ initialProperties }: RealEstateViewProps) {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <div className="flex items-center gap-2 ">
-          <Button variant="ghost">
+          <Button variant="ghost" aria-label="Adicionar imóvel">
             <Plus className="size-4" />
             Adicionar
           </Button>
 
-          <Button>
+          <Button aria-label="Importar imóveis">
             <Upload className="size-4" />
             Importar
           </Button>
@@ -74,6 +75,7 @@ export function RealEstateView({ initialProperties }: RealEstateViewProps) {
         <div className="flex items-center gap-2 rounded-2xl p-4 w-full border border-gray-200 justify-between">
           <div className="flex items-center gap-2">
             <Button
+              aria-label="Filtrar por alugados"
               variant="ghost-gray"
               data-testid="status-filter-rented"
               onClick={() => setStatusFilter(statusFilter === 'rented' ? 'all' : 'rented')}
@@ -83,6 +85,7 @@ export function RealEstateView({ initialProperties }: RealEstateViewProps) {
               Alugados
             </Button>
             <Button
+              aria-label="Filtrar por vazios"
               variant="ghost-gray"
               data-testid="status-filter-vacant"
               onClick={() => setStatusFilter(statusFilter === 'vacant' ? 'all' : 'vacant')}
@@ -92,6 +95,7 @@ export function RealEstateView({ initialProperties }: RealEstateViewProps) {
               Vazio
             </Button>
             <Button
+              aria-label="Filtrar por atrazados"
               variant="ghost-gray"
               data-testid="status-filter-overdue"
               onClick={() => setStatusFilter(statusFilter === 'overdue' ? 'all' : 'overdue')}
@@ -102,11 +106,11 @@ export function RealEstateView({ initialProperties }: RealEstateViewProps) {
             </Button>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost-gray">
+            <Button variant="ghost-gray" aria-label="Visualizar em colunas">
               <Grid2x2 className="size-4" />
               Colunas
             </Button>
-            <Button variant="ghost-gray">
+            <Button variant="ghost-gray" aria-label="Visualizar em tabela">
               <List className="size-4" />
               Tabela
             </Button>
