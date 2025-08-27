@@ -14,6 +14,7 @@ export default {
     },
     extend: {
       colors: {
+        system: '#94a3b8',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

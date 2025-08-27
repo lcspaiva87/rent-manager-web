@@ -5,8 +5,14 @@ import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { Payment } from './payments-view';
@@ -33,7 +39,6 @@ interface RegisterPaymentDialogProps {
 export function RegisterPaymentDialog({ onSubmit }: RegisterPaymentDialogProps) {
   const [open, setOpen] = useState(false);
   const form = useForm<FormValues>({
-    // Cast para contornar incompatibilidade de tipo entre inferência e resolver
     resolver: zodResolver(schema as any) as any,
     defaultValues: {
       tenantName: '',
