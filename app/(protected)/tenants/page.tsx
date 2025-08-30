@@ -1,4 +1,5 @@
 import { type Tenant, TenantsContainer } from './_components';
+import { TenantsRegisterUser } from './_components/tenants-register-user';
 
 export default function TenantsPage() {
   const tenants: Tenant[] = [
@@ -58,6 +59,7 @@ export default function TenantsPage() {
 
   return (
     <div className="space-y-6">
+      <TenantsRegisterUser />
       <TenantsContainer initialTenants={tenants} />
     </div>
   );
