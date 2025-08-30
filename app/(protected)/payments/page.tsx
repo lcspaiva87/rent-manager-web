@@ -84,11 +84,11 @@ export default function Payments() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-success to-success/80 text-success-foreground">
+        <Card className="flex flex-col bg-gray-100 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300 border-t-4 border-green-500">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm opacity-90">Recebido</p>
+                <p className="text-sm  text-black">Recebido</p>
                 <p className="text-2xl font-bold">R$ {stats.totalReceived.toLocaleString()}</p>
               </div>
               <CheckCircle className="h-8 w-8 opacity-80" />
@@ -96,7 +96,7 @@ export default function Payments() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-warning to-warning/80 text-warning-foreground">
+        <Card className="flex flex-col bg-gray-100 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300 border-t-4 border-amber-500">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -108,7 +108,7 @@ export default function Payments() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground">
+        <Card className="flex flex-col bg-gray-100 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300 border-t-4 border-red-500">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -120,7 +120,7 @@ export default function Payments() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground">
+        <Card className="flex flex-col bg-gray-100 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300 border-t-4 border-blue-500">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>

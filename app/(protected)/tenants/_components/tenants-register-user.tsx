@@ -25,17 +25,8 @@ import { tenantRegisterSchema } from '../Schema/tenantRegisterSchema';
 
 type TenantRegisterForm = z.infer<typeof tenantRegisterSchema>;
 
-interface TenantsRegisterUserProps {
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  onSubmit?: (data: TenantRegisterForm) => void;
-}
-
-export function TenantsRegisterUser({
-  open = true,
-  onOpenChange,
-  onSubmit,
-}: TenantsRegisterUserProps) {
+export function TenantsRegisterUser() {
+  const [open, setOpen] = useState(false);
   const [contractType, setContractType] = useState<'residencial' | 'comercial' | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -69,32 +60,12 @@ export function TenantsRegisterUser({
     setValue('contractType', type);
   };
 
-  const validateAndTransformData = (data: TenantRegisterForm) => {
-    const rentValue = parseFloat(data.rentValue.replace(/[^\d,]/g, '').replace(',', '.'));
-    const paymentDay = parseInt(data.paymentDay);
-    const monthlyRent = parseFloat(data.monthlyRent.replace(/[^\d,]/g, '').replace(',', '.'));
-
-    return {
-      ...data,
-      rentValue,
-      paymentDay,
-      monthlyRent,
-    };
-  };
-
   const onFormSubmit = async (data: TenantRegisterForm) => {
     try {
       setIsSubmitting(true);
-      const transformedData = validateAndTransformData(data);
-
-      if (onSubmit) {
-        await onSubmit(transformedData as any);
-      }
-
-      // Reset form após submissão bem-sucedida
       reset();
       setContractType(null);
-      onOpenChange?.(false);
+      setOpen(false);
     } catch {
     } finally {
       setIsSubmitting(false);
@@ -119,7 +90,7 @@ export function TenantsRegisterUser({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Button variant="outline">Cadastrar Inquilino</Button>
       </DialogTrigger>
@@ -127,8 +98,11 @@ export function TenantsRegisterUser({
         <DialogHeader>
           <DialogTitle>Cadastrar novo inquilino</DialogTitle>
 
-          <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
-            {/* Header com ícone */}
+          <form
+            id="tenant-register-form"
+            onSubmit={handleSubmit(onFormSubmit)}
+            className="space-y-6"
+          >
             <div className="space-y-2">
               <Button
                 type="button"
@@ -140,7 +114,6 @@ export function TenantsRegisterUser({
               </Button>
             </div>
 
-            {/* Tipo de contrato */}
             <section className="space-y-2">
               <Label className="text-sm font-medium">Tipo de contrato *</Label>
               <div className="flex gap-2">
@@ -166,7 +139,6 @@ export function TenantsRegisterUser({
               )}
             </section>
 
-            {/* Linha 1: Nome completo e Email */}
             <section className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="fullName" className="text-sm font-medium">
@@ -198,7 +170,6 @@ export function TenantsRegisterUser({
               </div>
             </section>
 
-            {/* Linha 2: Telefone e Documento */}
             <section className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="phone" className="text-sm font-medium">
@@ -229,7 +200,6 @@ export function TenantsRegisterUser({
               </div>
             </section>
 
-            {/* Linha 3: Data de início e Valor da renda */}
             <section className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="startDate" className="text-sm font-medium">
@@ -263,7 +233,6 @@ export function TenantsRegisterUser({
               </div>
             </section>
 
-            {/* Linha 4: Dia de pagamento */}
             <section className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="paymentDay" className="text-sm font-medium">
@@ -282,10 +251,9 @@ export function TenantsRegisterUser({
                   <p className="text-sm text-red-500">{errors.paymentDay.message}</p>
                 )}
               </div>
-              <div /> {/* Espaço vazio para manter o grid */}
+              <div />
             </section>
 
-            {/* Linha 5: Selects */}
             <section className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label className="text-sm font-medium">Imóvel *</Label>
@@ -348,7 +316,6 @@ export function TenantsRegisterUser({
               </div>
             </section>
 
-            {/* Notas */}
             <section className="space-y-2">
               <Label htmlFor="notes" className="text-sm font-medium">
                 Notas
@@ -369,7 +336,7 @@ export function TenantsRegisterUser({
             onClick={() => {
               reset();
               setContractType(null);
-              onOpenChange?.(false);
+              setOpen(false);
             }}
             disabled={isSubmitting}
           >
@@ -377,18 +344,11 @@ export function TenantsRegisterUser({
           </Button>
 
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              type="button"
-              onClick={() => {
-                // Funcionalidade "Guardar rascunho" pode ser implementada aqui
-              }}
-              disabled={isSubmitting}
-            >
+            <Button variant="outline" type="button" onClick={() => {}} disabled={isSubmitting}>
               Guardar rascunho
             </Button>
 
-            <Button type="submit" onClick={handleSubmit(onFormSubmit)} disabled={isSubmitting}>
+            <Button type="submit" form="tenant-register-form" disabled={isSubmitting}>
               {isSubmitting ? 'Registrando...' : 'Continuar'}
             </Button>
           </div>

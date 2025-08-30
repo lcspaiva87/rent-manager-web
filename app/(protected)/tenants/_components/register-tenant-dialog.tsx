@@ -56,7 +56,6 @@ export function RegisterTenantDialog({
   const [open, setOpen] = useState(false);
   const [propertyMode, setPropertyMode] = useState<'select' | 'new'>('select');
   const form = useForm<TenantForm>({
-    // Cast mínimo devido a incompatibilidade de inferência entre transform e RHF
     resolver: zodResolver(tenantSchema as any) as any,
     defaultValues: {
       name: '',
@@ -107,109 +106,117 @@ export function RegisterTenantDialog({
           <DialogTitle>Novo Inquilino</DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(submit)} className="space-y-4">
-          <div className="grid gap-3">
-            <div className="grid gap-1">
-              <Label htmlFor="name">Nome</Label>
-              <Input id="name" {...form.register('name')} />
-              {form.formState.errors.name && (
-                <p className="text-xs text-destructive">{form.formState.errors.name.message}</p>
-              )}
+          <section className="grid gap-3">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-1">
+                <Label htmlFor="name">Nome</Label>
+                <Input aria-label="name" id="name" {...form.register('name')} />
+                {form.formState.errors.name && (
+                  <p className="text-xs text-destructive">{form.formState.errors.name.message}</p>
+                )}
+              </div>
+              <div className="grid gap-1">
+                <Label htmlFor="email">Email</Label>
+                <Input aria-label="email" id="email" type="email" {...form.register('email')} />
+                {form.formState.errors.email && (
+                  <p className="text-xs text-destructive">{form.formState.errors.email.message}</p>
+                )}
+              </div>
+              <div className="grid gap-1">
+                <Label htmlFor="phone">Telefone</Label>
+                <Input id="phone" {...form.register('phone')} />
+                {form.formState.errors.phone && (
+                  <p className="text-xs text-destructive">{form.formState.errors.phone.message}</p>
+                )}
+              </div>
+              <div className="grid gap-1">
+                <Label>Imóvel</Label>
+                {propertyMode === 'select' && propertyOptions.length > 0 && (
+                  <Select
+                    value={form.watch('property')}
+                    onValueChange={(v) => {
+                      if (v === '__new') {
+                        setPropertyMode('new');
+                        form.setValue('property', '');
+                      } else {
+                        form.setValue('property', v);
+                      }
+                    }}
+                  >
+                    <SelectTrigger data-testid="property-select">
+                      <SelectValue placeholder="Selecione o imóvel" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {propertyOptions.map((opt) => (
+                        <SelectItem key={opt} value={opt}>
+                          {opt}
+                        </SelectItem>
+                      ))}
+                      <SelectItem value="__new">Adicionar novo...</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+                {(propertyMode === 'new' || propertyOptions.length === 0) && (
+                  <div className="flex gap-2">
+                    <Input
+                      id="newProperty"
+                      placeholder="Novo imóvel"
+                      value={newProperty}
+                      onChange={(e) => setNewProperty(e.target.value)}
+                    />
+                    {propertyOptions.length > 0 && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setPropertyMode('select');
+                          setNewProperty('');
+                        }}
+                      >
+                        Voltar
+                      </Button>
+                    )}
+                  </div>
+                )}
+                {form.formState.errors.property && (
+                  <p className="text-xs text-destructive">
+                    {form.formState.errors.property.message}
+                  </p>
+                )}
+              </div>
+              <div className="grid gap-1">
+                <Label htmlFor="contractStart">Início Contrato</Label>
+                <Input id="contractStart" type="date" {...form.register('contractStart')} />
+                {form.formState.errors.contractStart && (
+                  <p className="text-xs text-destructive">
+                    {form.formState.errors.contractStart.message}
+                  </p>
+                )}
+              </div>
+              <div className="grid gap-1">
+                <Label htmlFor="contractEnd">Fim Contrato</Label>
+                <Input id="contractEnd" type="date" {...form.register('contractEnd')} />
+                {form.formState.errors.contractEnd && (
+                  <p className="text-xs text-destructive">
+                    {form.formState.errors.contractEnd.message}
+                  </p>
+                )}
+              </div>
+              <div className="grid gap-1">
+                <Label htmlFor="rent">Aluguel (R$)</Label>
+                <Input id="rent" type="number" min="0" step="0.01" {...form.register('rent')} />
+                {form.formState.errors.rent && (
+                  <p className="text-xs text-destructive">{form.formState.errors.rent.message}</p>
+                )}
+              </div>
             </div>
-            <div className="grid gap-1">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" {...form.register('email')} />
-              {form.formState.errors.email && (
-                <p className="text-xs text-destructive">{form.formState.errors.email.message}</p>
-              )}
-            </div>
-            <div className="grid gap-1">
-              <Label htmlFor="phone">Telefone</Label>
-              <Input id="phone" {...form.register('phone')} />
-              {form.formState.errors.phone && (
-                <p className="text-xs text-destructive">{form.formState.errors.phone.message}</p>
-              )}
-            </div>
-            <div className="grid gap-1">
-              <Label>Imóvel</Label>
-              {propertyMode === 'select' && propertyOptions.length > 0 && (
-                <Select
-                  value={form.watch('property')}
-                  onValueChange={(v) => {
-                    if (v === '__new') {
-                      setPropertyMode('new');
-                      form.setValue('property', '');
-                    } else {
-                      form.setValue('property', v);
-                    }
-                  }}
-                >
-                  <SelectTrigger data-testid="property-select">
-                    <SelectValue placeholder="Selecione o imóvel" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {propertyOptions.map((opt) => (
-                      <SelectItem key={opt} value={opt}>
-                        {opt}
-                      </SelectItem>
-                    ))}
-                    <SelectItem value="__new">Adicionar novo...</SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
-              {(propertyMode === 'new' || propertyOptions.length === 0) && (
-                <div className="flex gap-2">
-                  <Input
-                    id="newProperty"
-                    placeholder="Novo imóvel"
-                    value={newProperty}
-                    onChange={(e) => setNewProperty(e.target.value)}
-                  />
-                  {propertyOptions.length > 0 && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => {
-                        setPropertyMode('select');
-                        setNewProperty('');
-                      }}
-                    >
-                      Voltar
-                    </Button>
-                  )}
-                </div>
-              )}
-              {form.formState.errors.property && (
-                <p className="text-xs text-destructive">{form.formState.errors.property.message}</p>
-              )}
-            </div>
-            <div className="grid gap-1">
-              <Label htmlFor="contractStart">Início Contrato</Label>
-              <Input id="contractStart" type="date" {...form.register('contractStart')} />
-              {form.formState.errors.contractStart && (
-                <p className="text-xs text-destructive">
-                  {form.formState.errors.contractStart.message}
-                </p>
-              )}
-            </div>
-            <div className="grid gap-1">
-              <Label htmlFor="contractEnd">Fim Contrato</Label>
-              <Input id="contractEnd" type="date" {...form.register('contractEnd')} />
-              {form.formState.errors.contractEnd && (
-                <p className="text-xs text-destructive">
-                  {form.formState.errors.contractEnd.message}
-                </p>
-              )}
-            </div>
-            <div className="grid gap-1">
-              <Label htmlFor="rent">Aluguel (R$)</Label>
-              <Input id="rent" type="number" min="0" step="0.01" {...form.register('rent')} />
-              {form.formState.errors.rent && (
-                <p className="text-xs text-destructive">{form.formState.errors.rent.message}</p>
-              )}
-            </div>
-          </div>
+          </section>
           <div className="flex justify-end gap-2 pt-2">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <Button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="bg-transparent text-muted-foreground hover:bg-[#a3a3a317]"
+            >
               Cancelar
             </Button>
             <Button type="submit" disabled={form.formState.isSubmitting}>

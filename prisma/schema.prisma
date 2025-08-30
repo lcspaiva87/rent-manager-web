@@ -1,0 +1,429 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  lastName      String         @map("last_name")
+  email         String         @unique
+  phone         String?
+  password      String
+  avatar        String?
+  role          UserRole       @default(ADMIN)
+  isActive      Boolean        @default(true) @map("is_active")
+  emailVerified Boolean        @default(false) @map("email_verified")
+  lastLogin     DateTime?      @map("last_login")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  properties    Property[]
+  tenantProfile Tenant?
+  contracts     Contract[]
+  notifications Notification[]
+  auditLogs     AuditLog[]
+
+  @@map("users")
+}
+
+model Property {
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  description    String?
+  street         String
+  number         String
+  complement     String?
+  neighborhood   String
+  city           String
+  state          String
+  zipCode        String          @map("zip_code")
+  country        String          @default("Brasil")
+  propertyType   PropertyType    @map("property_type")
+  totalArea      Float?          @map("total_area")
+  builtArea      Float?          @map("built_area")
+  bedrooms       Int             @default(0)
+  bathrooms      Int             @default(0)
+  parkingSpaces  Int             @default(0) @map("parking_spaces")
+  furnished      Boolean         @default(false)
+  rentPrice      Float           @map("rent_price")
+  condominiumFee Float?          @map("condominium_fee")
+  iptuValue      Float?          @map("iptu_value")
+  status         PropertyStatus  @default(AVAILABLE)
+  amenities      String[]
+  appliances     String[]
+  images         PropertyImage[]
+  latitude       Float?
+  longitude      Float?
+  isActive       Boolean         @default(true) @map("is_active")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  ownerId        String          @map("owner_id") @db.ObjectId
+  owner          User            @relation(fields: [ownerId], references: [id])
+  contracts      Contract[]
+  maintenances   Maintenance[]
+
+  @@map("properties")
+}
+
+model PropertyImage {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  url        String
+  caption    String?
+  isMain     Boolean  @default(false) @map("is_main")
+  order      Int      @default(0)
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
+  propertyId String   @map("property_id") @db.ObjectId
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("property_images")
+}
+
+model Tenant {
+  id                       String            @id @default(auto()) @map("_id") @db.ObjectId
+  name                     String
+  lastName                 String            @map("last_name")
+  email                    String            @unique
+  phone                    String
+  documentType             DocumentType      @map("document_type")
+  documentNumber           String            @unique @map("document_number")
+  birthDate                DateTime?         @map("birth_date")
+  nationality              String            @default("Brasileira")
+  occupation               String?
+  company                  String?
+  monthlyIncome            Float?            @map("monthly_income")
+  emergencyContactName     String?           @map("emergency_contact_name")
+  emergencyContactPhone    String?           @map("emergency_contact_phone")
+  emergencyContactRelation String?           @map("emergency_contact_relation")
+  creditScore              Int?              @map("credit_score")
+  tenantScore              Float?            @map("tenant_score")
+  status                   TenantStatus      @default(ACTIVE)
+  notes                    String?
+  isActive                 Boolean           @default(true) @map("is_active")
+  createdAt                DateTime          @default(now()) @map("created_at")
+  updatedAt                DateTime          @updatedAt @map("updated_at")
+  userId                   String?           @unique @map("user_id") @db.ObjectId
+  user                     User?             @relation(fields: [userId], references: [id])
+  contracts                Contract[]
+  documents                TenantDocument[]
+  references               TenantReference[]
+
+  @@map("tenants")
+}
+
+model TenantDocument {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  type       DocumentType
+  fileName   String       @map("file_name")
+  fileUrl    String       @map("file_url")
+  fileSize   Int          @map("file_size")
+  mimeType   String       @map("mime_type")
+  isVerified Boolean      @default(false) @map("is_verified")
+  uploadedAt DateTime     @default(now()) @map("uploaded_at")
+  tenantId   String       @map("tenant_id") @db.ObjectId
+  tenant     Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("tenant_documents")
+}
+
+model TenantReference {
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  type         ReferenceType
+  name         String
+  phone        String
+  email        String?
+  relationship String
+  notes        String?
+  verified     Boolean       @default(false)
+  createdAt    DateTime      @default(now()) @map("created_at")
+  tenantId     String        @map("tenant_id") @db.ObjectId
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("tenant_references")
+}
+
+model Contract {
+  id                 String         @id @default(auto()) @map("_id") @db.ObjectId
+  contractNumber     String         @unique @map("contract_number")
+  startDate          DateTime       @map("start_date")
+  endDate            DateTime       @map("end_date")
+  signedAt           DateTime?      @map("signed_at")
+  monthlyRent        Float          @map("monthly_rent")
+  securityDeposit    Float          @map("security_deposit")
+  condominiumFee     Float?         @map("condominium_fee")
+  iptu               Float?
+  paymentDueDay      Int            @default(5) @map("payment_due_day")
+  lateFeePercentage  Float          @default(2.0) @map("late_fee_percentage")
+  discountPercentage Float          @default(0) @map("discount_percentage")
+  status             ContractStatus @default(ACTIVE)
+  autoRenew          Boolean        @default(false) @map("auto_renew")
+  renewalPeriod      Int            @default(12) @map("renewal_period")
+  terms              String?
+  specialClauses     String[]       @map("special_clauses")
+  createdAt          DateTime       @default(now()) @map("created_at")
+  updatedAt          DateTime       @updatedAt @map("updated_at")
+  propertyId         String         @map("property_id") @db.ObjectId
+  property           Property       @relation(fields: [propertyId], references: [id])
+  tenantId           String         @map("tenant_id") @db.ObjectId
+  tenant             Tenant         @relation(fields: [tenantId], references: [id])
+  managerId          String         @map("manager_id") @db.ObjectId
+  manager            User           @relation(fields: [managerId], references: [id])
+  payments           Payment[]
+  maintenances       Maintenance[]
+
+  @@map("contracts")
+}
+
+model Payment {
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  dueDate         DateTime       @map("due_date")
+  amount          Float
+  paidAmount      Float?         @map("paid_amount")
+  paidAt          DateTime?      @map("paid_at")
+  lateFee         Float          @default(0) @map("late_fee")
+  discount        Float          @default(0)
+  finalAmount     Float?         @map("final_amount")
+  status          PaymentStatus  @default(PENDING)
+  paymentMethod   PaymentMethod? @map("payment_method")
+  transactionId   String?        @unique @map("transaction_id")
+  gatewayResponse Json?          @map("gateway_response")
+  receiptUrl      String?        @map("receipt_url")
+  description     String?
+  notes           String?
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+  contractId      String         @map("contract_id") @db.ObjectId
+  contract        Contract       @relation(fields: [contractId], references: [id])
+
+  @@map("payments")
+}
+
+model Maintenance {
+  id              String              @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  description     String
+  category        MaintenanceCategory
+  priority        MaintenancePriority @default(MEDIUM)
+  status          MaintenanceStatus   @default(PENDING)
+  estimatedCost   Float?              @map("estimated_cost")
+  actualCost      Float?              @map("actual_cost")
+  reportedAt      DateTime            @default(now()) @map("reported_at")
+  scheduledAt     DateTime?           @map("scheduled_at")
+  completedAt     DateTime?           @map("completed_at")
+  assignedTo      String?             @map("assigned_to")
+  serviceProvider String?             @map("service_provider")
+  images          MaintenanceImage[]
+  notes           String?
+  propertyId      String              @map("property_id") @db.ObjectId
+  property        Property            @relation(fields: [propertyId], references: [id])
+  contractId      String?             @map("contract_id") @db.ObjectId
+  contract        Contract?           @relation(fields: [contractId], references: [id])
+
+  @@map("maintenances")
+}
+
+model MaintenanceImage {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  url           String
+  caption       String?
+  uploadedAt    DateTime    @default(now()) @map("uploaded_at")
+  maintenanceId String      @map("maintenance_id") @db.ObjectId
+  maintenance   Maintenance @relation(fields: [maintenanceId], references: [id], onDelete: Cascade)
+
+  @@map("maintenance_images")
+}
+
+model Notification {
+  id             String              @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  message        String
+  type           NotificationType
+  channel        NotificationChannel
+  status         NotificationStatus  @default(PENDING)
+  scheduledAt    DateTime?           @map("scheduled_at")
+  sentAt         DateTime?           @map("sent_at")
+  recipientEmail String?             @map("recipient_email")
+  recipientPhone String?             @map("recipient_phone")
+  metadata       Json?
+  createdAt      DateTime            @default(now()) @map("created_at")
+  userId         String              @map("user_id") @db.ObjectId
+  user           User                @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  action    String
+  entity    String
+  entityId  String   @map("entity_id")
+  oldValues Json?    @map("old_values")
+  newValues Json?    @map("new_values")
+  ipAddress String   @map("ip_address")
+  userAgent String   @map("user_agent")
+  timestamp DateTime @default(now())
+  userId    String   @map("user_id") @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  TENANT
+
+  @@map("user_role")
+}
+
+enum PropertyType {
+  HOUSE
+  APARTMENT
+  STUDIO
+  COMMERCIAL
+  OFFICE
+  WAREHOUSE
+  LAND
+
+  @@map("property_type")
+}
+
+enum PropertyStatus {
+  AVAILABLE
+  RENTED
+  MAINTENANCE
+  UNAVAILABLE
+
+  @@map("property_status")
+}
+
+enum DocumentType {
+  CPF
+  RG
+  CNH
+  PASSPORT
+  WORK_PERMIT
+  INCOME_PROOF
+  BANK_STATEMENT
+  REFERENCE_LETTER
+
+  @@map("document_type")
+}
+
+enum TenantStatus {
+  ACTIVE
+  INACTIVE
+  BLACKLISTED
+  PENDING
+
+  @@map("tenant_status")
+}
+
+enum ReferenceType {
+  PERSONAL
+  PROFESSIONAL
+  PREVIOUS_LANDLORD
+
+  @@map("reference_type")
+}
+
+enum ContractStatus {
+  DRAFT
+  ACTIVE
+  EXPIRED
+  TERMINATED
+  RENEWED
+
+  @@map("contract_status")
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  OVERDUE
+  PARTIAL
+  CANCELLED
+  REFUNDED
+
+  @@map("payment_status")
+}
+
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER
+  PIX
+  CREDIT_CARD
+  DEBIT_CARD
+  CHECK
+  BOLETO
+
+  @@map("payment_method")
+}
+
+enum MaintenanceCategory {
+  PLUMBING
+  ELECTRICAL
+  PAINTING
+  CLEANING
+  APPLIANCE
+  STRUCTURAL
+  GARDEN
+  SECURITY
+  OTHER
+
+  @@map("maintenance_category")
+}
+
+enum MaintenancePriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+
+  @@map("maintenance_priority")
+}
+
+enum MaintenanceStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+
+  @@map("maintenance_status")
+}
+
+enum NotificationType {
+  PAYMENT_DUE
+  PAYMENT_OVERDUE
+  PAYMENT_RECEIVED
+  CONTRACT_EXPIRY
+  MAINTENANCE_REQUEST
+  MAINTENANCE_UPDATE
+  WELCOME
+  REMINDER
+
+  @@map("notification_type")
+}
+
+enum NotificationChannel {
+  EMAIL
+  SMS
+  PUSH
+  IN_APP
+
+  @@map("notification_channel")
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+
+  @@map("notification_status")
+}

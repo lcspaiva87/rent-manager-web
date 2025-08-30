@@ -521,36 +521,6 @@ export function TenantsView({ tenants }: TenantsViewProps) {
           </PaginationContent>
         </Pagination>
       )}
-      <Card>
-        <CardContent className="p-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
-            <div>
-              <div className="text-2xl font-bold text-primary">
-                {tenants.filter((t) => t.status === 'active').length}
-              </div>
-              <div className="text-xs md:text-sm text-muted-foreground">Inquilinos Ativos</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-success">
-                {tenants.filter((t) => t.paymentStatus === 'up_to_date').length}
-              </div>
-              <div className="text-xs md:text-sm text-muted-foreground">Em Dia</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-warning">
-                {tenants.filter((t) => t.paymentStatus === 'pending').length}
-              </div>
-              <div className="text-xs md:text-sm text-muted-foreground">Pendentes</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-destructive">
-                {tenants.filter((t) => t.paymentStatus === 'late').length}
-              </div>
-              <div className="text-xs md:text-sm text-muted-foreground">Atrasados</div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </>
   );
 }
