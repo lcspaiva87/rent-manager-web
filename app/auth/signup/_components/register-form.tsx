@@ -29,7 +29,6 @@ export const RegisterForm = ({ onSubmit, isLoading = false }: registerFormProps)
 
   const handleFormSubmit = async (data: SignupFormData) => {
     try {
-      await onSubmit?.(data);
     } catch (_error) {}
   };
 
