@@ -10,7 +10,9 @@ describe('Formulário de Registro', () => {
   });
 
   beforeEach(() => {
-    cy.visit('/auth/signin');
+    const BASE_URL = Cypress.env('BASE_URL') || 'http://localhost:3000';
+    // Deve visitar a página de cadastro (não a rota de API)
+    cy.visit(`${BASE_URL}/auth/signup`);
   });
 
   describe('Elementos da Interface', () => {
@@ -188,7 +190,7 @@ describe('Formulário de Registro', () => {
 
     it('deve chamar a função onSubmit com dados corretos', () => {
       // Intercepta chamadas de rede (se houver)
-      cy.intercept('POST', '/api/auth/register', {
+      cy.intercept('POST', '/api/user/register', {
         statusCode: 200,
         body: { success: true },
       }).as('registerRequest');
@@ -210,7 +212,7 @@ describe('Formulário de Registro', () => {
   describe('Estados de Loading', () => {
     it('deve exibir estado de carregamento durante o envio', () => {
       // Intercepta e atrasa a resposta para simular carregamento
-      cy.intercept('POST', '/api/auth/register', {
+      cy.intercept('POST', '/api/user/register', {
         statusCode: 200,
         delay: 2000,
         body: { success: true },
@@ -247,7 +249,7 @@ describe('Formulário de Registro', () => {
       cy.get('#confirmPassword').type('MinhaSenh@123');
 
       // Intercepta com delay
-      cy.intercept('POST', '/api/auth/register', {
+      cy.intercept('POST', '/api/user/register', {
         statusCode: 200,
         delay: 1000,
         body: { success: true },
@@ -281,13 +283,13 @@ describe('Formulário de Registro', () => {
     it('deve permitir navegação por teclado', () => {
       // Testa navegação com Tab
       cy.get('#name').focus();
-      cy.get('#name').type('{tab}');
+      cy.get('#name').tab();
       cy.get('#email').should('be.focused');
 
-      cy.get('#email').type('{tab}');
+      cy.get('#email').tab();
       cy.get('#password').should('be.focused');
 
-      cy.get('#password').type('{tab}');
+      cy.get('#password').tab();
       cy.get('#confirmPassword').should('be.focused');
     });
 

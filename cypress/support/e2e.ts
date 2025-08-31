@@ -14,6 +14,7 @@
 // ***********************************************************
 
 import './commands';
+import 'cypress-plugin-tab';
 
 // Configure viewport for consistent testing
 Cypress.config('viewportWidth', 1280);

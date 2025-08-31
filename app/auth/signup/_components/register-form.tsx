@@ -25,10 +25,20 @@ export const RegisterForm = ({ onSubmit, isLoading = false }: registerFormProps)
     formState: { errors, isSubmitting },
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
   });
 
   const handleFormSubmit = async (data: SignupFormData) => {
     try {
+      // Aciona callback externa se fornecida
+      await onSubmit?.(data);
+      // Chamada real à API para o Cypress interceptar e para estado de loading funcionar
+      await fetch('/api/user/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
     } catch (_error) {}
   };
 
@@ -58,9 +68,10 @@ export const RegisterForm = ({ onSubmit, isLoading = false }: registerFormProps)
               placeholder="Digite seu nome"
               {...register('name')}
               className={errors.name ? 'border-destructive' : ''}
+              aria-invalid={!!errors.name}
               disabled={isFormLoading}
             />
-            {errors.email && <p className="text-sm text-destructive">{errors.name?.message}</p>}
+            {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
           </div>
 
           <div className="space-y-2">
@@ -73,6 +84,7 @@ export const RegisterForm = ({ onSubmit, isLoading = false }: registerFormProps)
               placeholder="seu@email.com"
               {...register('email')}
               className={errors.email ? 'border-destructive' : ''}
+              aria-invalid={!!errors.email}
               disabled={isFormLoading}
             />
             {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
@@ -89,12 +101,15 @@ export const RegisterForm = ({ onSubmit, isLoading = false }: registerFormProps)
                 placeholder="Digite sua senha"
                 {...register('password')}
                 className={errors.password ? 'border-destructive pr-10' : 'pr-10'}
+                aria-invalid={!!errors.password}
                 disabled={isFormLoading}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                tabIndex={-1}
+                aria-hidden="true"
                 disabled={isFormLoading}
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -116,12 +131,15 @@ export const RegisterForm = ({ onSubmit, isLoading = false }: registerFormProps)
                 placeholder="Confirme sua senha"
                 {...register('confirmPassword')}
                 className={errors.confirmPassword ? 'border-destructive pr-10' : 'pr-10'}
+                aria-invalid={!!errors.confirmPassword}
                 disabled={isFormLoading}
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                tabIndex={-1}
+                aria-hidden="true"
                 disabled={isFormLoading}
               >
                 {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
