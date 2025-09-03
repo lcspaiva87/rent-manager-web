@@ -67,7 +67,7 @@ export function DialogContent({
         type="button"
       />
       <div
-        className={`relative z-10 w-full max-w-lg rounded-lg bg-background p-6 shadow-lg ${className || ''}`}
+        className={`relative z-10 w-full max-w-lg rounded-lg bg-background p-6 pr-0 shadow-lg ${className || ''}`}
       >
         <button
           type="button"
@@ -89,4 +89,20 @@ export function DialogHeader({ children }: { children: React.ReactNode }) {
 
 export function DialogTitle({ children }: { children: React.ReactNode }) {
   return <h2 className="text-xl font-semibold leading-none tracking-tight">{children}</h2>;
+}
+
+export function DialogFooter({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 ${className || ''}`}
+    >
+      {children}
+    </div>
+  );
 }
